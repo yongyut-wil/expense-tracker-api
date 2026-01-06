@@ -1,31 +1,25 @@
-// src/transactions/transactions.controller.ts
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  UseGuards,
-  Request,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, UseGuards } from '@nestjs/common';
 import { TransactionsService } from './transactions.service';
-import { AuthGuard } from '@nestjs/passport'; // Guard มาตรฐานของ NestJS
+import { AuthGuard } from '@nestjs/passport';
+import { CurrentUser } from '../auth/decorators/current-user.decorator';
+import type { RequestUser } from '../auth/interfaces/jwt-payload.interface';
+import { CreateTransactionDto } from './dto/create-transaction.dto';
 
 @Controller('transactions')
-// ✅ ล็อกทั้ง Controller นี้เลย ถ้าไม่มี Token ห้ามเข้า!
 @UseGuards(AuthGuard('jwt'))
 export class TransactionsController {
   constructor(private readonly transactionsService: TransactionsService) {}
 
   @Post()
-  create(@Request() req, @Body() createTransactionDto: any) {
-    const userId = req.user.userId;
-
-    return this.transactionsService.create(userId, createTransactionDto);
+  create(
+    @CurrentUser() user: RequestUser,
+    @Body() createTransactionDto: CreateTransactionDto,
+  ) {
+    return this.transactionsService.create(user.userId, createTransactionDto);
   }
 
   @Get()
-  findAll(@Request() req) {
-    const userId = req.user.userId;
-    return this.transactionsService.findAllByUser(userId);
+  findAll(@CurrentUser() user: RequestUser) {
+    return this.transactionsService.findAllByUser(user.userId);
   }
 }
