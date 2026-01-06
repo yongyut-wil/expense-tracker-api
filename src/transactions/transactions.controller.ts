@@ -22,4 +22,9 @@ export class TransactionsController {
   findAll(@CurrentUser() user: RequestUser) {
     return this.transactionsService.findAllByUser(user.userId);
   }
+
+  @Get('dashboard')
+  getDashboard(@CurrentUser() user: RequestUser) {
+    return this.transactionsService.getDashboard(user.userId);
+  }
 }

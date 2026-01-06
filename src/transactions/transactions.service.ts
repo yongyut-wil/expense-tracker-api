@@ -20,11 +20,34 @@ export class TransactionsService {
     });
   }
 
-  // ดึงเฉพาะของ User คนนั้น (ห้ามดึงของคนอื่น!)
   async findAllByUser(userId: number) {
     return this.prisma.transaction.findMany({
       where: { userId: userId },
-      orderBy: { date: 'desc' }, // Sort from newest to oldest
+      orderBy: { date: 'desc' },
     });
+  }
+
+  async getDashboard(userId: number) {
+    const summary = await this.prisma.transaction.groupBy({
+      by: ['type'],
+      where: { userId },
+      _sum: { amount: true },
+    });
+
+    const totalIncome =
+      summary.find((s) => s.type === 'INCOME')?._sum.amount ?? 0;
+    const totalExpense =
+      summary.find((s) => s.type === 'EXPENSE')?._sum.amount ?? 0;
+
+    const transactionCount = await this.prisma.transaction.count({
+      where: { userId },
+    });
+
+    return {
+      totalIncome,
+      totalExpense,
+      balance: totalIncome - totalExpense,
+      transactionCount,
+    };
   }
 }
