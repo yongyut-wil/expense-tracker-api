@@ -12,8 +12,10 @@ export class UsersService {
     return this.prisma.user.create({ data });
   }
 
-  async findAll(): Promise<User[]> {
-    return this.prisma.user.findMany();
+  async findAll(): Promise<Omit<User, 'password'>[]> {
+    const users = await this.prisma.user.findMany();
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    return users.map(({ password, ...user }) => user);
   }
 
   async findOne(id: number): Promise<User | null> {

@@ -4,9 +4,11 @@ import { AuthGuard } from '@nestjs/passport';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import type { RequestUser } from '../auth/interfaces/jwt-payload.interface';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('transactions')
 @UseGuards(AuthGuard('jwt'))
+@ApiBearerAuth()
 export class TransactionsController {
   constructor(private readonly transactionsService: TransactionsService) {}
 
