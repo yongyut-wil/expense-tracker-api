@@ -21,6 +21,16 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
+  async getMe(userId: number): Promise<UserWithoutPassword | null> {
+    const user = await this.usersService.findOne(userId);
+    if (!user) {
+      return null;
+    }
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password, ...result } = user;
+    return result;
+  }
+
   async login(loginDto: LoginDto): Promise<AuthResponse> {
     const user = await this.usersService.findByEmail(loginDto.email);
     if (!user) {

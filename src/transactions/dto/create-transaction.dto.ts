@@ -1,5 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
-import { IsEnum, IsInt, IsNotEmpty, IsString, Min } from 'class-validator';
+import {
+  IsEnum,
+  IsInt,
+  IsNotEmpty,
+  IsString,
+  Min,
+  IsOptional,
+  IsDateString,
+} from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export enum TransactionType {
@@ -30,4 +38,13 @@ export class CreateTransactionDto {
   @IsString()
   @IsNotEmpty()
   category: string;
+
+  @ApiProperty({
+    example: '2026-01-15T00:00:00.000Z',
+    description: 'วันที่ทำรายการ (optional - ถ้าไม่ระบุจะใช้วันปัจจุบัน)',
+    required: false,
+  })
+  @IsOptional()
+  @IsDateString()
+  date?: string;
 }
