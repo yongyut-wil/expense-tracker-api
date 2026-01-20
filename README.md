@@ -352,9 +352,9 @@ yarn test:e2e
 ```
 expense-tracker-api/
 ├── src/
-│   ├── auth/              # โมดูล Authentication
-│   ├── users/             # โมดูล Users
-│   ├── transactions/      # โมดูล Transactions
+│   ├── auth/              # Module Authentication
+│   ├── users/             # Module Users
+│   ├── transactions/      # Module Transactions
 │   ├── prisma/            # Prisma Service
 │   ├── common/            # Filters, Interceptors, Guards
 │   ├── app.module.ts      # Root module
@@ -422,14 +422,6 @@ npx prisma migrate reset
 - **Global Exception Filter** จัดการ errors อย่างปลอดภัย
 
 ## การมีส่วนร่วม
-
-หากต้องการมีส่วนร่วมในโปรเจค:
-
-1. Fork โปรเจค
-2. สร้าง feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit การเปลี่ยนแปลง (`git commit -m 'Add some AmazingFeature'`)
-4. Push ไปยัง branch (`git push origin feature/AmazingFeature`)
-5. เปิด Pull Request
 
 ## License
 
