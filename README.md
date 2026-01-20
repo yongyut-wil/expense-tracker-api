@@ -1,98 +1,446 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# 💰 Expense Tracker API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+API สำหรับระบบบันทึกรายรับ-รายจ่าย พัฒนาด้วย NestJS, Prisma และ PostgreSQL
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## สารบัญ
 
-## Description
+- [คุณสมบัติ](#คุณสมบัติ)
+- [เทคโนโลยีที่ใช้](#เทคโนโลยีที่ใช้)
+- [ข้อกำหนดเบื้องต้น](#ข้อกำหนดเบื้องต้น)
+- [การติดตั้ง](#การติดตั้ง)
+- [การตั้งค่า](#การตั้งค่า)
+- [การรันโปรเจค](#การรันโปรเจค)
+- [API Documentation](#api-documentation)
+- [โครงสร้างฐานข้อมูล](#โครงสร้างฐานข้อมูล)
+- [API Endpoints](#api-endpoints)
+- [การใช้งาน Docker](#การใช้งาน-docker)
+- [การทดสอบ](#การทดสอบ)
+- [เอกสารเพิ่มเติม](#เอกสารเพิ่มเติม)
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## คุณสมบัติ
 
-## Project setup
+- ระบบ Authentication ด้วย JWT
+- จัดการรายการรายรับ-รายจ่าย (เพิ่ม แก้ไข ลบ ดูรายการ)
+- แยกประเภทและหมวดหมู่รายการ
+- จัดการข้อมูลผู้ใช้และโปรไฟล์
+- เข้ารหัสรหัสผ่านด้วย bcrypt
+- API Documentation ด้วย Swagger
+- รองรับ Docker และ Docker Compose
+- Validation ข้อมูลด้วย class-validator
+- รองรับ CORS
 
-```bash
-$ yarn install
-```
+## 🛠 เทคโนโลยีที่ใช้
 
-## Compile and run the project
+- **Framework**: [NestJS](https://nestjs.com/) v11
+- **Language**: [TypeScript](https://www.typescriptlang.org/) v5.7
+- **Database**: [PostgreSQL](https://www.postgresql.org/) 15
+- **ORM**: [Prisma](https://www.prisma.io/) v7.2
+- **Authentication**: JWT (JSON Web Tokens)
+- **Validation**: class-validator, class-transformer
+- **Documentation**: Swagger/OpenAPI
+- **Testing**: Jest
+- **Package Manager**: Yarn
 
-```bash
-# development
-$ yarn run start
+## ข้อกำหนดเบื้องต้น
 
-# watch mode
-$ yarn run start:dev
+ต้องติดตั้งโปรแกรมต่อไปนี้ก่อน:
 
-# production mode
-$ yarn run start:prod
-```
+- **Node.js** v24.x หรือสูงกว่า
+- **Yarn** v1.22 หรือสูงกว่า
+- **PostgreSQL** v15 หรือสูงกว่า (หรือใช้ Docker)
+- **Docker** และ **Docker Compose** (ถ้าต้องการรันด้วย Docker)
 
-## Run tests
+## การติดตั้ง
 
-```bash
-# unit tests
-$ yarn run test
-
-# e2e tests
-$ yarn run test:e2e
-
-# test coverage
-$ yarn run test:cov
-```
-
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+### 1. Clone โปรเจค
 
 ```bash
-$ yarn install -g @nestjs/mau
-$ mau deploy
+git clone <repository-url>
+cd expense-tracker-api
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+### 2. ติดตั้ง Dependencies
 
-## Resources
+```bash
+yarn install
+```
 
-Check out a few resources that may come in handy when working with NestJS:
+### 3. ตั้งค่า Environment Variables
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+คัดลอกไฟล์ `.env.example` เป็น `.env`:
 
-## Support
+```bash
+cp .env.example .env
+```
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+แก้ไขไฟล์ `.env` ตามความต้องการ:
 
-## Stay in touch
+```env
+# Database
+DATABASE_URL="postgresql://username:password@localhost:5432/database_name"
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+# PostgreSQL (for Docker)
+POSTGRES_USER="username"
+POSTGRES_PASSWORD="password"
+POSTGRES_DB="database_name"
+POSTGRES_PORT="5432"
+
+# JWT
+JWT_SECRET="your-secret-key-here"
+
+```
+
+### 4. ตั้งค่าฐานข้อมูล
+
+#### วิธีที่ 1: ใช้ PostgreSQL ที่ติดตั้งในเครื่อง
+
+สร้างฐานข้อมูล:
+
+```bash
+# เข้าสู่ PostgreSQL
+psql -U postgres
+
+# สร้างฐานข้อมูล
+CREATE DATABASE expense_tracker;
+
+# ออกจาก PostgreSQL
+\q
+```
+
+#### วิธีที่ 2: ใช้ Docker (แนะนำ)
+
+```bash
+# รัน PostgreSQL ด้วย Docker Compose
+docker-compose up -d db
+```
+
+### 5. รัน Prisma Migrations
+
+```bash
+# สร้างตารางในฐานข้อมูล
+npx prisma migrate dev
+
+# หรือถ้าใช้ Docker
+npx prisma migrate deploy
+```
+
+### 6. Generate Prisma Client
+
+```bash
+npx prisma generate
+```
+
+## การตั้งค่า
+
+### Environment Variables
+
+| ตัวแปร | คำอธิบาย | ค่าเริ่มต้น |
+|--------|----------|------------|
+| `DATABASE_URL` | URL เชื่อมต่อฐานข้อมูล PostgreSQL | - |
+| `POSTGRES_USER` | ชื่อผู้ใช้ PostgreSQL | - |
+| `POSTGRES_PASSWORD` | รหัสผ่าน PostgreSQL | - |
+| `POSTGRES_DB` | ชื่อฐานข้อมูล | - |
+| `POSTGRES_PORT` | พอร์ตของ PostgreSQL | `5432` |
+| `JWT_SECRET` | Secret key สำหรับ JWT | - |
+| `CORS_ORIGIN` | URL ของ Frontend ที่อนุญาต | `http://localhost:3001` |
+| `PORT` | พอร์ตของ API | `3000` |
+| `NODE_ENV` | สภาพแวดล้อม (development/production) | `development` |
+
+## การรันโปรเจค
+
+### Development Mode
+
+```bash
+# รันในโหมด watch (รีสตาร์ทอัตโนมัติเมื่อมีการแก้ไขไฟล์)
+yarn start:dev
+```
+
+### Production Mode
+
+```bash
+# Build โปรเจค
+yarn build
+
+# รัน production build
+yarn start:prod
+```
+
+### Debug Mode
+
+```bash
+# รันในโหมด debug
+yarn start:debug
+```
+
+API จะรันที่ `http://localhost:3000`
+
+## API Documentation
+
+เมื่อรันโปรเจคแล้ว สามารถเข้าถึง Swagger API Documentation ได้ที่:
+
+```
+http://localhost:3000/api-docs
+```
+
+Swagger UI จะแสดง:
+- รายการ API endpoints ทั้งหมด
+- Request/Response schemas
+- ทดสอบ API ได้โดยตรง
+- ตัวอย่างการใช้งาน
+
+## โครงสร้างฐานข้อมูล
+
+### User (ผู้ใช้)
+
+| ฟิลด์ | ประเภท | คำอธิบาย |
+|------|--------|----------|
+| `id` | Int | รหัสผู้ใช้ (Primary Key) |
+| `email` | String | อีเมล (Unique) |
+| `password` | String | รหัสผ่าน (เข้ารหัสแล้ว) |
+| `name` | String? | ชื่อผู้ใช้ (Optional) |
+| `createdAt` | DateTime | วันที่สร้าง |
+| `updatedAt` | DateTime | วันที่อัปเดต |
+
+### Transaction (รายการธุรกรรม)
+
+| ฟิลด์ | ประเภท | คำอธิบาย |
+|------|--------|----------|
+| `id` | Int | รหัสธุรกรรม (Primary Key) |
+| `title` | String | ชื่อรายการ |
+| `amount` | Int | จำนวนเงิน |
+| `type` | TransactionType | ประเภท (INCOME/EXPENSE) |
+| `category` | String | หมวดหมู่ |
+| `date` | DateTime | วันที่ทำรายการ |
+| `userId` | Int | รหัสผู้ใช้ (Foreign Key) |
+
+### TransactionType (ประเภทธุรกรรม)
+
+- `INCOME` - รายรับ
+- `EXPENSE` - รายจ่าย
+
+## API Endpoints
+
+### Authentication
+
+| Method | Endpoint | คำอธิบาย | Authentication |
+|--------|----------|----------|----------------|
+| POST | `/api/auth/register` | ลงทะเบียนผู้ใช้ใหม่ | ไม่ต้อง |
+| POST | `/api/auth/login` | เข้าสู่ระบบ | ไม่ต้อง |
+| GET | `/api/auth/me` | ดูข้อมูลผู้ใช้ปัจจุบัน | ต้องการ |
+
+### Users
+
+| Method | Endpoint | คำอธิบาย | Authentication |
+|--------|----------|----------|----------------|
+| GET | `/api/users` | ดูรายการผู้ใช้ทั้งหมด | ต้องการ |
+| GET | `/api/users/:id` | ดูข้อมูลผู้ใช้ตาม ID | ต้องการ |
+| PATCH | `/api/users/:id` | แก้ไขข้อมูลผู้ใช้ | ต้องการ |
+| DELETE | `/api/users/:id` | ลบผู้ใช้ | ต้องการ |
+
+### Transactions
+
+| Method | Endpoint | คำอธิบาย | Authentication |
+|--------|----------|----------|----------------|
+| GET | `/api/transactions` | ดูรายการธุรกรรมทั้งหมด | ต้องการ |
+| GET | `/api/transactions/:id` | ดูข้อมูลธุรกรรมตาม ID | ต้องการ |
+| POST | `/api/transactions` | สร้างรายการธุรกรรมใหม่ | ต้องการ |
+| PATCH | `/api/transactions/:id` | แก้ไขรายการธุรกรรม | ต้องการ |
+| DELETE | `/api/transactions/:id` | ลบรายการธุรกรรม | ต้องการ |
+
+### ตัวอย่างการใช้งาน
+
+#### ลงทะเบียน
+
+```bash
+curl -X POST http://localhost:3000/api/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "user@example.com",
+    "password": "password123",
+    "name": "John Doe"
+  }'
+```
+
+#### เข้าสู่ระบบ
+
+```bash
+curl -X POST http://localhost:3000/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "user@example.com",
+    "password": "password123"
+  }'
+```
+
+#### สร้างรายการธุรกรรม
+
+```bash
+curl -X POST http://localhost:3000/api/transactions \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN" \
+  -d '{
+    "title": "เงินเดือน",
+    "amount": 30000,
+    "type": "INCOME",
+    "category": "เงินเดือน",
+    "date": "2026-01-20T00:00:00.000Z"
+  }'
+```
+
+## การใช้งาน Docker
+
+### รันด้วย Docker Compose (แนะนำ)
+
+```bash
+# รันทั้ง API และ Database
+docker-compose up -d
+
+# ดู logs
+docker-compose logs -f
+
+# หยุดการทำงาน
+docker-compose down
+
+# หยุดและลบข้อมูล
+docker-compose down -v
+```
+
+### รัน Database อย่างเดียว
+
+```bash
+# รัน PostgreSQL
+docker-compose up -d db
+
+# ตรวจสอบสถานะ
+docker-compose ps
+```
+
+### Build Docker Image
+
+```bash
+# Build image
+docker build -t expense-tracker-api .
+
+# รัน container
+docker run -p 3000:3000 expense-tracker-api
+```
+
+## การทดสอบ
+
+### Unit Tests
+
+```bash
+# รัน unit tests
+yarn test
+
+# รันในโหมด watch
+yarn test:watch
+
+# ดู test coverage
+yarn test:cov
+```
+
+### E2E Tests
+
+```bash
+# รัน end-to-end tests
+yarn test:e2e
+```
+
+## โครงสร้างโปรเจค
+
+```
+expense-tracker-api/
+├── src/
+│   ├── auth/              # โมดูล Authentication
+│   ├── users/             # โมดูล Users
+│   ├── transactions/      # โมดูล Transactions
+│   ├── prisma/            # Prisma Service
+│   ├── common/            # Filters, Interceptors, Guards
+│   ├── app.module.ts      # Root module
+│   └── main.ts            # Entry point
+├── prisma/
+│   └── schema.prisma      # Database schema
+├── test/                  # E2E tests
+├── docs/                  # เอกสารเพิ่มเติม
+├── .env.example           # ตัวอย่าง environment variables
+├── docker-compose.yml     # Docker Compose configuration
+├── Dockerfile             # Docker configuration
+└── package.json           # Dependencies และ scripts
+```
+
+## เอกสารเพิ่มเติม
+
+- [การตั้งค่า Prisma](docs/PRISMA_SETUP.md)
+- [การตั้งค่า Docker](docs/DOCKER_SETUP.md)
+- [ระบบ Authentication](docs/AUTHENTICATION.md)
+- [Frontend Design Prompt](docs/FRONTEND_DESIGN_PROMPT.md)
+
+## คำสั่งที่ใช้บ่อย
+
+```bash
+# ติดตั้ง dependencies
+yarn install
+
+# รันในโหมด development
+yarn start:dev
+
+# Build โปรเจค
+yarn build
+
+# รัน production
+yarn start:prod
+
+# Format code
+yarn format
+
+# Lint code
+yarn lint
+
+# Generate Prisma Client
+npx prisma generate
+
+# สร้าง migration
+npx prisma migrate dev --name migration_name
+
+# Deploy migrations
+npx prisma migrate deploy
+
+# เปิด Prisma Studio (GUI สำหรับดูข้อมูล)
+npx prisma studio
+
+# Reset database
+npx prisma migrate reset
+```
+
+## ความปลอดภัย
+
+- รหัสผ่านถูกเข้ารหัสด้วย **bcrypt**
+- ใช้ **JWT** สำหรับ authentication
+- **CORS** ป้องกันการเข้าถึงจาก origin ที่ไม่ได้รับอนุญาต
+- **Validation** ตรวจสอบข้อมูลทุก request
+- **Global Exception Filter** จัดการ errors อย่างปลอดภัย
+
+## การมีส่วนร่วม
+
+หากต้องการมีส่วนร่วมในโปรเจค:
+
+1. Fork โปรเจค
+2. สร้าง feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit การเปลี่ยนแปลง (`git commit -m 'Add some AmazingFeature'`)
+4. Push ไปยัง branch (`git push origin feature/AmazingFeature`)
+5. เปิด Pull Request
 
 ## License
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+โปรเจคนี้เป็น open source ภายใต้ [MIT License](LICENSE)
+
+## เทคโนโลยีที่ใช้
+
+- [NestJS](https://nestjs.com/) - Node.js Framework
+- [Prisma](https://www.prisma.io/) - ORM
+- [PostgreSQL](https://www.postgresql.org/) - Database
+
+---
+
+หากพบปัญหาหรือมีข้อสงสัย สามารถเปิด [Issue](https://github.com/yongyut-wil/expense-tracker-api/issues) ได้เลยครับ
