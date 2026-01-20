@@ -142,7 +142,6 @@ npx prisma generate
 | `POSTGRES_DB` | ชื่อฐานข้อมูล | - |
 | `POSTGRES_PORT` | พอร์ตของ PostgreSQL | `5432` |
 | `JWT_SECRET` | Secret key สำหรับ JWT | - |
-| `CORS_ORIGIN` | URL ของ Frontend ที่อนุญาต | `http://localhost:3001` |
 | `PORT` | พอร์ตของ API | `3000` |
 | `NODE_ENV` | สภาพแวดล้อม (development/production) | `development` |
 
