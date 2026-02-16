@@ -346,34 +346,40 @@ yarn test:cov
 yarn test:e2e
 ```
 
-## โครงสร้างโปรเจค
+## Architecture
 
-```
-expense-tracker-api/
-├── src/
-│   ├── auth/              # Module Authentication
-│   ├── users/             # Module Users
-│   ├── transactions/      # Module Transactions
-│   ├── prisma/            # Prisma Service
-│   ├── common/            # Filters, Interceptors, Guards
-│   ├── app.module.ts      # Root module
-│   └── main.ts            # Entry point
-├── prisma/
-│   └── schema.prisma      # Database schema
-├── test/                  # E2E tests
-├── docs/                  # เอกสารเพิ่มเติม
-├── .env.example           # ตัวอย่าง environment variables
-├── docker-compose.yml     # Docker Compose configuration
-├── Dockerfile             # Docker configuration
-└── package.json           # Dependencies และ scripts
-```
+โปรเจคนี้ใช้ **Hexagonal Architecture** (Ports and Adapters Pattern) เพื่อแยก Business Logic ออกจาก Technical Details โดยมี 3 ชั้นหลัก:
+
+- **Domain Layer**: Business Logic และ Entity
+- **Application Layer**: Use Cases และ DTOs
+- **Infrastructure Layer**: Controllers, Database, External Services
+
+อ่านเพิ่มเติมได้ที่ [Hexagonal Architecture Guide](docs/HEXAGONAL_ARCHITECTURE.md)
 
 ## เอกสารเพิ่มเติม
 
-- [การตั้งค่า Prisma](docs/PRISMA_SETUP.md)
-- [การตั้งค่า Docker](docs/DOCKER_SETUP.md)
-- [ระบบ Authentication](docs/AUTHENTICATION.md)
-- [Frontend Design Prompt](docs/FRONTEND_DESIGN_PROMPT.md)
+### 📚 เอกสารหลัก
+
+- 🇹🇭 **[README ภาษาไทย](./README-TH.md)** - คู่มือฉบับภาษาไทยแบบละเอียด
+- **[🏗️ Hexagonal Architecture](docs/HEXAGONAL_ARCHITECTURE.md)** - อธิบายสถาปัตยกรรมและการออกแบบระบบ
+-🏗️ **[Architecture Guide (TH)](docs/architecture-guide-th.md)** - คู่มือสถาปัตยกรรมภาษาไทย
+- 🎯 **[Path Aliases Guide](docs/path_aliases_guide.md)** - วิธีใช้ Path Aliases (`@domain/*`, `@application/*`)
+- 🎮 **[Commands Guide (TH)](docs/commands-guide-th.md)** - รวมคำสั่งทั้งหมดภาษาไทย
+- 🐳 **[Docker Guide (TH)](docs/docker-guide-th.md)** - คู่มือ Docker แบบละเอียด
+- **[📁 Project Structure](docs/PROJECT_STRUCTURE.md)** - โครงสร้างโปรเจคและรายละเอียดแต่ละโมดูล
+- **[🎮 Commands Reference](docs/COMMANDS.md)** - คำสั่งที่ใช้ในการพัฒนาทั้งหมด
+- **[👨‍💻 Development Guide](docs/DEVELOPMENT_GUIDE.md)** - คู่มือการพัฒนาและ Best Practices
+
+### 🔧 เอกสารเทคนิค
+
+- **[🔌 API Guide](docs/API_GUIDE.md)** - คู่มือการใช้งาน API พร้อมตัวอย่าง
+- **[📊 Database Schema](docs/DATABASE_SCHEMA.md)** - โครงสร้างฐานข้อมูลและ Relationships
+
+### 📖 เอกสารอื่นๆ
+
+- **[🔐 Authentication](docs/AUTHENTICATION.md)** - ระบบ Authentication (ถ้ามี)
+- **[🐳 Docker Setup](docs/DOCKER_SETUP.md)** - การตั้งค่า Docker (ถ้ามี)
+- **[🎨 Frontend Design Prompt](docs/FRONTEND_DESIGN_PROMPT.md)** - Design Guideline สำหรับ Frontend
 
 ## คำสั่งที่ใช้บ่อย
 

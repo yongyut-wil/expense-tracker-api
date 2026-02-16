@@ -10,8 +10,8 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
-import { LoginDto } from './dto/login.dto';
-import { RegisterDto } from './dto/register.dto';
+import { LoginDto } from '@application/dto/auth/login.dto';
+import { RegisterDto } from '@application/dto/auth/register.dto';
 import { CurrentUser } from './decorators/current-user.decorator';
 import type { RequestUser } from './interfaces/jwt-payload.interface';
 import type {
@@ -41,4 +41,3 @@ export class AuthController {
     return this.authService.getMe(user.userId);
   }
 }
-

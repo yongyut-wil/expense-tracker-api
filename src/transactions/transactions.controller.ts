@@ -3,8 +3,8 @@ import { TransactionsService } from './transactions.service';
 import { AuthGuard } from '@nestjs/passport';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import type { RequestUser } from '../auth/interfaces/jwt-payload.interface';
-import { CreateTransactionDto } from './dto/create-transaction.dto';
-import { FilterTransactionDto } from './dto/filter-transaction.dto';
+import { CreateTransactionDto } from '@application/dto/transactions/create-transaction.dto';
+import { FilterTransactionDto } from '@application/dto/transactions/filter-transaction.dto';
 import { ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
 
 @Controller('transactions')
@@ -41,4 +41,3 @@ export class TransactionsController {
     return this.transactionsService.getDashboard(user.userId);
   }
 }
-

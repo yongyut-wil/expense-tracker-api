@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
-import { CreateTransactionDto } from './dto/create-transaction.dto';
-import { FilterTransactionDto } from './dto/filter-transaction.dto';
+import { PrismaService } from '@infrastructure/prisma/prisma.service';
+import { CreateTransactionDto } from '@application/dto/transactions/create-transaction.dto';
+import { FilterTransactionDto } from '@application/dto/transactions/filter-transaction.dto';
 
 @Injectable()
 export class TransactionsService {
