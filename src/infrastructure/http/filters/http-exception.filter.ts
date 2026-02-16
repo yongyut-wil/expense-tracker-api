@@ -6,10 +6,13 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { Response, Request } from 'express';
+import { Logger } from '@nestjs/common';
 import type { ApiResponse } from '../interfaces/api-response.interface';
 
 @Catch()
 export class GlobalExceptionFilter implements ExceptionFilter {
+  private readonly logger = new Logger('ExceptionFilter');
+
   catch(exception: unknown, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
@@ -36,6 +39,19 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       }
 
       code = this.getErrorCode(status);
+    } else if (exception instanceof Error) {
+      // Log unexpected errors with full stack trace
+      this.logger.error(
+        `Unexpected error at ${request.method} ${request.url}: ${exception.message}`,
+        exception.stack,
+      );
+      message = exception.message;
+    } else {
+      // Log completely unknown errors
+      this.logger.error(
+        `Unknown error at ${request.method} ${request.url}:`,
+        exception,
+      );
     }
 
     const errorResponse: ApiResponse<null> = {

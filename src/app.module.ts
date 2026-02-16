@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, MiddlewareConsumer, NestModule, RequestMethod } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -13,6 +13,7 @@ import { HttpTransactionsModule } from './infrastructure/http/http-transactions.
 // For now, commenting out until files are properly moved
 // import { GlobalExceptionFilter } from './infrastructure/http/filters/http-exception.filter';
 // import { ResponseInterceptor } from './infrastructure/http/interceptors/response.interceptor';
+import { LoggerMiddleware } from './infrastructure/http/middleware/logger.middleware';
 
 @Module({
   imports: [
@@ -37,4 +38,10 @@ import { HttpTransactionsModule } from './infrastructure/http/http-transactions.
     // },
   ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    // Apply logger middleware to all routes
+    consumer.apply(LoggerMiddleware).forRoutes('*');
+  }
+}
+

@@ -9,18 +9,18 @@ import { UserNotFoundException } from '@domain/exceptions';
  */
 @Injectable()
 export class GetCurrentUserUseCase {
-  constructor(
-    @Inject(IUserRepository)
-    private readonly userRepository: IUserRepository,
-  ) {}
+    constructor(
+        @Inject(IUserRepository)
+        private readonly userRepository: IUserRepository,
+    ) { }
 
-  async execute(userId: number): Promise<User> {
-    const user = await this.userRepository.findById(userId);
+    async execute(userId: number): Promise<User> {
+        const user = await this.userRepository.findById(userId);
 
-    if (!user) {
-      throw new UserNotFoundException(userId);
+        if (!user) {
+            throw new UserNotFoundException(userId);
+        }
+
+        return user;
     }
-
-    return user;
-  }
 }
