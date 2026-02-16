@@ -47,7 +47,9 @@ services:
         condition: service_healthy
     networks:
       - expense-tracker-dev-network
-    command: sh -c "npx prisma migrate dev && yarn start:dev"
+    # Note: Prisma 7 has issues with auto-migration
+    # Run migration manually after startup: docker-compose -f docker-compose.dev.yml exec app npx prisma db push
+    command: yarn start:dev
 
 volumes:
   postgres_dev_data:

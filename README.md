@@ -368,6 +368,7 @@ yarn test:e2e
 - 🐳 **[Docker Guide (TH)](docs/docker-guide-th.md)** - คู่มือ Docker แบบละเอียด
 - 🔧 **[Docker Dev Commands](docs/DOCKER_DEV_COMMANDS.md)** - คำสั่ง Docker สำหรับ Development
 - ⚖️ **[Docker Prod vs Dev](docs/DOCKER_PROD_VS_DEV.md)** - เปรียบเทียบ Production และ Development
+- 🔄 **[Migration Workflow](docs/MIGRATION_WORKFLOW.md)** - การจัดการ Database Migrations Dev → Prod
 - **[📁 Project Structure](docs/PROJECT_STRUCTURE.md)** - โครงสร้างโปรเจคและรายละเอียดแต่ละโมดูล
 - **[🎮 Commands Reference](docs/COMMANDS.md)** - คำสั่งที่ใช้ในการพัฒนาทั้งหมด
 - **[👨‍💻 Development Guide](docs/DEVELOPMENT_GUIDE.md)** - คู่มือการพัฒนาและ Best Practices

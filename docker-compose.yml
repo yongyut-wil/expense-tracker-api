@@ -40,7 +40,9 @@ services:
         condition: service_healthy
     networks:
       - expense-tracker-network
-    command: sh -c "npx prisma migrate deploy && node dist/main"
+    # Note: Migrations should be run separately before deployment
+    # Run: docker compose exec app npx prisma migrate deploy
+    command: node dist/main
 
 volumes:
   postgres_data:
