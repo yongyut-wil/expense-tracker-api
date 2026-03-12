@@ -140,7 +140,7 @@ services:
 
 #### `Dockerfile.dev` (Single-stage)
 ```dockerfile
-FROM node:24-alpine AS development
+FROM node:22-alpine AS development
 WORKDIR /app
 COPY package.json yarn.lock ./
 RUN yarn install  # ← All dependencies (dev + prod)
