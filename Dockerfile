@@ -1,7 +1,7 @@
 # Multi-stage Dockerfile for NestJS Expense Tracker API
 
 # Stage 1: Production dependencies
-FROM node:24-alpine AS deps
+FROM node:22-alpine AS deps
 WORKDIR /app
 COPY package.json yarn.lock ./
 # Increase yarn network timeout
@@ -13,7 +13,7 @@ COPY prisma ./prisma
 RUN npx prisma generate
 
 # Stage 2: Build stage
-FROM node:24-alpine AS builder
+FROM node:22-alpine AS builder
 WORKDIR /app
 COPY package.json yarn.lock ./
 RUN yarn config set network-timeout 300000 -g
@@ -25,7 +25,7 @@ RUN npx prisma generate
 RUN yarn build
 
 # Stage 3: Production stage
-FROM node:24-alpine AS production
+FROM node:22-alpine AS production
 WORKDIR /app
 ENV NODE_ENV=production
 
