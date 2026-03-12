@@ -21,28 +21,29 @@ services:
       retries: 5
 
   # NestJS Application
-  app:
+  api:
     build:
       context: .
       dockerfile: Dockerfile
     container_name: expense-tracker-api
     restart: unless-stopped
     ports:
-      - "${PORT:-3000}:3000"
+      - "${PORT:-3005}:3005"
     environment:
       NODE_ENV: production
       DATABASE_URL: postgresql://${DATABASE_USER:-postgres}:${DATABASE_PASSWORD:-postgres}@postgres:5432/${DATABASE_NAME:-expense_tracker}
       JWT_SECRET: ${JWT_SECRET}
       JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-24h}
-      PORT: 3000
+      PORT: 3005
     depends_on:
       postgres:
         condition: service_healthy
     networks:
       - expense-tracker-network
     # Note: Migrations should be run separately before deployment
-    # Run: docker compose exec app npx prisma migrate deploy
-    command: node dist/main
+    # Run: docker compose exec api npx prisma migrate deploy
+    # command: /bin/sh -c "npx prisma migrate deploy && node dist/src/main"
+    command: node dist/src/main
 
 volumes:
   postgres_data:

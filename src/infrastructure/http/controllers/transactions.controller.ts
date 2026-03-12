@@ -59,10 +59,7 @@ export class TransactionsController {
       userId: user.userId,
     });
 
-    return {
-      success: true,
-      data: transaction.toPlainObject(),
-    };
+    return transaction.toPlainObject();
   }
 
   @Get()
@@ -72,10 +69,7 @@ export class TransactionsController {
       userId: user.userId,
     });
 
-    return {
-      success: true,
-      data: transactions.map((t) => t.toPlainObject()),
-    };
+    return transactions.map((t) => t.toPlainObject());
   }
 
   @Get('filter')
@@ -94,21 +88,13 @@ export class TransactionsController {
       endDate: filterDto.endDate ? new Date(filterDto.endDate) : undefined,
     });
 
-    return {
-      success: true,
-      data: transactions.map((t) => t.toPlainObject()),
-    };
+    return transactions.map((t) => t.toPlainObject());
   }
 
   @Get('dashboard')
   @ApiOperation({ summary: 'ดูสถิติแดชบอร์ด' })
   async getDashboard(@CurrentUser() user: { userId: number }) {
-    const stats = await this.getDashboardUseCase.execute(user.userId);
-
-    return {
-      success: true,
-      data: stats,
-    };
+    return this.getDashboardUseCase.execute(user.userId);
   }
 
   @Put(':id')
@@ -127,10 +113,7 @@ export class TransactionsController {
         : undefined,
     });
 
-    return {
-      success: true,
-      data: transaction.toPlainObject(),
-    };
+    return transaction.toPlainObject();
   }
 
   @Delete(':id')
@@ -145,7 +128,6 @@ export class TransactionsController {
     });
 
     return {
-      success: true,
       message: 'Transaction deleted successfully',
     };
   }

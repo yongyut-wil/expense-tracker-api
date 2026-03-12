@@ -33,8 +33,8 @@ export class UpdateTransactionUseCase {
       throw new TransactionNotFoundException(data.id);
     }
 
-    // Update transaction
-    const { id, userId, ...updateData } = data;
+    // Update transaction - extract only the fields to update
+    const { id, userId: _, ...updateData } = data; // eslint-disable-line @typescript-eslint/no-unused-vars
     const transaction = await this.transactionRepository.update(id, updateData);
 
     return transaction;

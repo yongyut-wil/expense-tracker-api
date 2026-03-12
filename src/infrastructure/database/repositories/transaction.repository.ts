@@ -86,7 +86,7 @@ export class TransactionRepository implements ITransactionRepository {
         data,
       });
       return TransactionMapper.toDomain(transaction);
-    } catch (_) {
+    } catch {
       throw new TransactionNotFoundException(id);
     }
   }
@@ -94,7 +94,7 @@ export class TransactionRepository implements ITransactionRepository {
   async delete(id: number): Promise<void> {
     try {
       await this.prisma.transaction.delete({ where: { id } });
-    } catch (_) {
+    } catch {
       throw new TransactionNotFoundException(id);
     }
   }

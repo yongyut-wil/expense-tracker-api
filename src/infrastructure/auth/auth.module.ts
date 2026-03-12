@@ -5,17 +5,12 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { DatabaseModule } from '@infrastructure/database/database.module';
 
-// Import use cases
 import {
   RegisterUserUseCase,
   LoginUserUseCase,
   GetCurrentUserUseCase,
 } from '@application/use-cases/auth';
 
-/**
- * Auth Module
- * Handles authentication functionality
- */
 @Module({
   imports: [
     DatabaseModule,
@@ -23,11 +18,11 @@ import {
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: async (configService: ConfigService) => ({
+      useFactory: (configService: ConfigService) => ({
         secret: configService.get<string>('JWT_SECRET'),
         signOptions: {
           expiresIn: (configService.get<string>('JWT_EXPIRES_IN') ||
-            '24h') as any,
+            '24h') as `${number}${'s' | 'm' | 'h' | 'd'}`,
         },
       }),
     }),
@@ -43,6 +38,7 @@ import {
   exports: [
     JwtModule,
     PassportModule,
+    JwtStrategy,
     // Export use cases for controllers
     RegisterUserUseCase,
     LoginUserUseCase,

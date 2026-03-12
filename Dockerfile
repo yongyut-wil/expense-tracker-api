@@ -41,13 +41,14 @@ COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 
 # Copy Prisma schema for migrations
 COPY prisma ./prisma
+COPY prisma.config.ts ./prisma.config.ts
 
 # Expose application port
-EXPOSE 3000
+EXPOSE 3005
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-    CMD node -e "require('http').get('http://localhost:3000/api', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"
+    CMD node -e "require('http').get('http://localhost:3005/api', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"
 
 # Start the application
-CMD ["node", "dist/main"]
+CMD ["node", "dist/src/main"]
