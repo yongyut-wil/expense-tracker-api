@@ -1,43 +1,38 @@
 # Multi-stage Dockerfile for NestJS Expense Tracker API
-# Stage 1: Build stage
-FROM node:24-alpine AS builder
 
-# Set working directory
+# Stage 1: Production dependencies
+FROM node:24-alpine AS deps
 WORKDIR /app
-
-# Copy package files
 COPY package.json yarn.lock ./
-
-# Install dependencies
-RUN yarn install --frozen-lockfile
-
-# Copy source code
-COPY . .
-
-# Generate Prisma Client
+# Increase yarn network timeout
+RUN yarn config set network-timeout 300000 -g
+# Install only production dependencies and clean cache immediately
+RUN yarn install --production --frozen-lockfile && yarn cache clean
+# Copy prisma directory and generate client
+COPY prisma ./prisma
 RUN npx prisma generate
 
-# Build the application
+# Stage 2: Build stage
+FROM node:24-alpine AS builder
+WORKDIR /app
+COPY package.json yarn.lock ./
+RUN yarn config set network-timeout 300000 -g
+# Install all dependencies for building
+RUN yarn install --frozen-lockfile
+COPY . .
+# Generate client for build
+RUN npx prisma generate
 RUN yarn build
 
-# Stage 2: Production stage
+# Stage 3: Production stage
 FROM node:24-alpine AS production
-
-# Set working directory
 WORKDIR /app
-
-# Set NODE_ENV
 ENV NODE_ENV=production
 
-# Copy package files
-COPY package.json yarn.lock ./
-
-# Install production dependencies only
-RUN yarn install --frozen-lockfile --production
-
-# Copy built application from builder stage
+# Copy only the necessary files
 COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
+COPY --from=deps /app/node_modules ./node_modules
+COPY --from=deps /app/package.json ./package.json
 
 # Copy Prisma schema for migrations
 COPY prisma ./prisma
