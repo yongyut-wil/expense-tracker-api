@@ -3,6 +3,10 @@ name: Deploy API to EC2 k3s
 on:
   push:
     branches: [ "master", "main" ]
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+      - '.gitignore'
 
 env:
   REGISTRY: ghcr.io
@@ -11,6 +15,7 @@ env:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    if: "!startsWith(github.event.head_commit.message, 'skip:')"
     permissions:
       contents: read
       packages: write
