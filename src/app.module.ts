@@ -47,7 +47,8 @@ import { LoggerMiddleware } from './infrastructure/http/middleware/logger.middle
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    // Apply logger middleware to all routes
-    consumer.apply(LoggerMiddleware).forRoutes('*');
+    // Apply logger middleware to all routes. 
+    // Using '{*path}' to avoid NestJS v11 / path-to-regexp warning for '*'
+    consumer.apply(LoggerMiddleware).forRoutes('{*path}');
   }
 }
