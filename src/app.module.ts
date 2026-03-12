@@ -1,5 +1,7 @@
 import { Module, MiddlewareConsumer, NestModule } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { APP_GUARD } from '@nestjs/core';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
@@ -20,6 +22,16 @@ import { LoggerMiddleware } from './infrastructure/http/middleware/logger.middle
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+    ThrottlerModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => [
+        {
+          ttl: (configService.get<number>('THROTTLE_TTL') || 60) * 1000,
+          limit: configService.get<number>('THROTTLE_LIMIT') || 20,
+        },
+      ],
+    }),
     DatabaseModule,
     HttpAuthModule,
     HttpTransactionsModule,
@@ -27,15 +39,10 @@ import { LoggerMiddleware } from './infrastructure/http/middleware/logger.middle
   controllers: [AppController],
   providers: [
     AppService,
-    // Uncomment after filters and interceptors are properly moved
-    // {
-    //   provide: APP_FILTER,
-    //   useClass: GlobalExceptionFilter,
-    // },
-    // {
-    //   provide: APP_INTERCEPTOR,
-    //   useClass: ResponseInterceptor,
-    // },
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
   ],
 })
 export class AppModule implements NestModule {
