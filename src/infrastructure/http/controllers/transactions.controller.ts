@@ -25,6 +25,7 @@ import {
   GetDashboardUseCase,
 } from '@application/use-cases/transactions';
 import { CreateTransactionDto } from '@application/dto/transactions/create-transaction.dto';
+import { UpdateTransactionDto } from '@application/dto/transactions/update-transaction.dto';
 import { FilterTransactionDto } from '@application/dto/transactions/filter-transaction.dto';
 import { CurrentUser } from '@infrastructure/http/decorators/current-user.decorator';
 
@@ -102,7 +103,7 @@ export class TransactionsController {
   async update(
     @CurrentUser() user: { userId: number },
     @Param('id', ParseIntPipe) id: number,
-    @Body() updateTransactionDto: Partial<CreateTransactionDto>,
+    @Body() updateTransactionDto: UpdateTransactionDto,
   ) {
     const transaction = await this.updateTransactionUseCase.execute({
       id,

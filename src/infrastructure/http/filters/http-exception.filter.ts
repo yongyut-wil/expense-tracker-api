@@ -8,6 +8,7 @@ import {
 import { Response, Request } from 'express';
 import { Logger } from '@nestjs/common';
 import type { ApiResponse } from '../interfaces/api-response.interface';
+import { DomainException } from '@domain/exceptions/domain.exception';
 
 @Catch()
 export class GlobalExceptionFilter implements ExceptionFilter {
@@ -39,6 +40,10 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       }
 
       code = this.getErrorCode(status);
+    } else if (exception instanceof DomainException) {
+      status = this.getStatusForDomainException(exception);
+      message = exception.message;
+      code = exception.code;
     } else if (exception instanceof Error) {
       // Log unexpected errors with full stack trace
       this.logger.error(
@@ -82,5 +87,18 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       500: 'INTERNAL_ERROR',
     };
     return codeMap[status] || 'UNKNOWN_ERROR';
+  }
+
+  private getStatusForDomainException(exception: DomainException): number {
+    if (exception.code === 'TRANSACTION_NOT_FOUND' || exception.constructor.name === 'TransactionNotFoundException' || exception.constructor.name === 'UserNotFoundException') {
+      return HttpStatus.NOT_FOUND;
+    }
+    if (exception.code === 'EMAIL_ALREADY_EXISTS') {
+      return HttpStatus.CONFLICT;
+    }
+    if (exception.code === 'INVALID_CREDENTIALS') {
+      return HttpStatus.UNAUTHORIZED;
+    }
+    return HttpStatus.BAD_REQUEST;
   }
 }
