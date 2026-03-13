@@ -7,6 +7,10 @@ import {
 import { Transaction } from '@domain/entities/transaction.entity';
 import { TransactionMapper } from '../mappers/transaction.mapper';
 import { TransactionNotFoundException } from '@domain/exceptions';
+import * as dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 
 /**
  * Transaction Repository Implementation
@@ -100,35 +104,25 @@ export class TransactionRepository implements ITransactionRepository {
   }
 
   async getDashboardStats(userId: number): Promise<DashboardStats> {
-    const now = new Date();
+    // For Bangkok (UTC+7), determine the "current" year and month from the user's perspective.
+    // However, since frontend now normalizes all day midnights to 00:00 UTC,
+    // our boundaries should be clean UTC midnights.
+    const nowUTC = dayjs.utc();
+    const bangkokNow = nowUTC.add(7, 'hour'); // Anchor "today" in Bangkok
 
-    // เดือนปัจจุบัน
-    const currentMonthStart = new Date(now.getFullYear(), now.getMonth(), 1);
-    const currentMonthEnd = new Date(
-      now.getFullYear(),
-      now.getMonth() + 1,
-      0,
-      23,
-      59,
-      59,
-      999,
-    );
+    const currentMonthStart = bangkokNow.startOf('month').utc(true).toDate();
+    const currentMonthEnd = bangkokNow.endOf('month').utc(true).toDate();
 
-    // เดือนก่อนหน้า
-    const previousMonthStart = new Date(
-      now.getFullYear(),
-      now.getMonth() - 1,
-      1,
-    );
-    const previousMonthEnd = new Date(
-      now.getFullYear(),
-      now.getMonth(),
-      0,
-      23,
-      59,
-      59,
-      999,
-    );
+    const previousMonthStart = bangkokNow
+      .subtract(1, 'month')
+      .startOf('month')
+      .utc(true)
+      .toDate();
+    const previousMonthEnd = bangkokNow
+      .subtract(1, 'month')
+      .endOf('month')
+      .utc(true)
+      .toDate();
 
     // ข้อมูลเดือนปัจจุบัน
     const currentSummary = await this.prisma.transaction.groupBy({

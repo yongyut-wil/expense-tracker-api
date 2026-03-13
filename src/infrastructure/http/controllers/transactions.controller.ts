@@ -28,6 +28,10 @@ import { CreateTransactionDto } from '@application/dto/transactions/create-trans
 import { UpdateTransactionDto } from '@application/dto/transactions/update-transaction.dto';
 import { FilterTransactionDto } from '@application/dto/transactions/filter-transaction.dto';
 import { CurrentUser } from '@infrastructure/http/decorators/current-user.decorator';
+import * as dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 
 /**
  * Transactions Controller
@@ -81,12 +85,23 @@ export class TransactionsController {
     @CurrentUser() user: { userId: number },
     @Query() filterDto: FilterTransactionDto,
   ) {
+    let start: Date | undefined;
+    let end: Date | undefined;
+
+    if (filterDto.startDate) {
+      // Frontend sends 2026-03-01T00:00:00.000Z
+      start = dayjs.utc(filterDto.startDate).startOf('day').toDate();
+    }
+
+    if (filterDto.endDate) {
+      // Ensure we cover the full day in UTC
+      end = dayjs.utc(filterDto.endDate).endOf('day').toDate();
+    }
+
     const transactions = await this.getTransactionsUseCase.execute({
       userId: user.userId,
-      startDate: filterDto.startDate
-        ? new Date(filterDto.startDate)
-        : undefined,
-      endDate: filterDto.endDate ? new Date(filterDto.endDate) : undefined,
+      startDate: start,
+      endDate: end,
     });
 
     return transactions.map((t) => t.toPlainObject());
