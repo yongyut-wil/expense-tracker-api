@@ -38,15 +38,26 @@ export class UpdateTransactionUseCase {
       throw new TransactionNotFoundException(data.id);
     }
 
-    const updateData: any = { ...data };
-    delete updateData.id;
-    delete updateData.userId;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { id, userId, ...dataWithoutIds } = data;
+    const updateData: Partial<{
+      title?: string;
+      amount?: number;
+      type?: 'INCOME' | 'EXPENSE';
+      category?: string;
+      date?: Date;
+      titleEn?: string;
+    }> = dataWithoutIds;
 
     // จัดการเรื่องเวลาในการอัปเดต
     if (data.date) {
       const dateObj = dayjs(data.date);
       // ถ้าแก้แค่วันที่แต่เวลามาเป็น 0 และเป็นวันนี้ ให้ใช้เวลา Now
-      if (dateObj.hour() === 0 && dateObj.minute() === 0 && dateObj.second() === 0) {
+      if (
+        dateObj.hour() === 0 &&
+        dateObj.minute() === 0 &&
+        dateObj.second() === 0
+      ) {
         const now = dayjs();
         if (dateObj.isSame(now, 'day')) {
           updateData.date = now.toDate();
@@ -69,30 +80,36 @@ export class UpdateTransactionUseCase {
 
     const titleToScan = data.title || existing.title;
     const titleChanged = data.title && data.title !== existing.title;
-    const categoryIsGeneric = !data.category || genericCategories.includes(data.category);
+    const categoryIsGeneric =
+      !data.category || genericCategories.includes(data.category);
 
     // Re-categorize if title changed OR if the user is using a generic category
     if (titleToScan && (titleChanged || categoryIsGeneric)) {
       // 1. Re-translate & Get AI opinion
-      const aiResult = await this.aiCategorizationService.categorize(titleToScan);
-      
+      const aiResult =
+        await this.aiCategorizationService.categorize(titleToScan);
+
       if (aiResult) {
         updateData.titleEn = aiResult.titleEn;
-        
+
         // Only overwrite category if generic
         if (categoryIsGeneric) {
           updateData.category = aiResult.category;
         }
       } else {
         // Fallback to keyword if AI fails
-        const keywordCategory = this.keywordCategorizationService.categorize(titleToScan);
+        const keywordCategory =
+          this.keywordCategorizationService.categorize(titleToScan);
         if (keywordCategory && categoryIsGeneric) {
           updateData.category = keywordCategory;
         }
       }
     }
 
-    const transaction = await this.transactionRepository.update(data.id, updateData);
+    const transaction = await this.transactionRepository.update(
+      data.id,
+      updateData,
+    );
 
     return transaction;
   }

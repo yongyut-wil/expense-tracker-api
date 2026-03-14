@@ -11,10 +11,11 @@ jest.mock('@google/generative-ai', () => {
           return {
             generateContent: jest.fn().mockResolvedValue({
               response: {
-                text: () => JSON.stringify({
-                  category: 'Food',
-                  titleEn: 'Eating'
-                }),
+                text: () =>
+                  JSON.stringify({
+                    category: 'Food',
+                    titleEn: 'Eating',
+                  }),
               },
             }),
           };
@@ -53,7 +54,7 @@ describe('AICategorizationService', () => {
     const result = await service.categorize('กินข้าว');
     expect(result).toEqual({
       category: 'Food',
-      titleEn: 'Eating'
+      titleEn: 'Eating',
     });
   });
 
@@ -61,10 +62,11 @@ describe('AICategorizationService', () => {
     // Override the mock for this specific test
     (service as any).model.generateContent.mockResolvedValueOnce({
       response: {
-        text: () => JSON.stringify({
-          category: 'InvalidCategory',
-          titleEn: 'Random'
-        }),
+        text: () =>
+          JSON.stringify({
+            category: 'InvalidCategory',
+            titleEn: 'Random',
+          }),
       },
     });
 

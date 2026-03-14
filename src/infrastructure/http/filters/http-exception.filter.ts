@@ -90,7 +90,11 @@ export class GlobalExceptionFilter implements ExceptionFilter {
   }
 
   private getStatusForDomainException(exception: DomainException): number {
-    if (exception.code === 'TRANSACTION_NOT_FOUND' || exception.constructor.name === 'TransactionNotFoundException' || exception.constructor.name === 'UserNotFoundException') {
+    if (
+      exception.code === 'TRANSACTION_NOT_FOUND' ||
+      exception.constructor.name === 'TransactionNotFoundException' ||
+      exception.constructor.name === 'UserNotFoundException'
+    ) {
       return HttpStatus.NOT_FOUND;
     }
     if (exception.code === 'EMAIL_ALREADY_EXISTS') {

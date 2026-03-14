@@ -34,7 +34,11 @@ export class CreateTransactionUseCase {
     // ให้พยายามแสตมป์เวลาปัจจุบันเข้าไปเพื่อให้การ Sort แม่นยำ
     if (data.date) {
       const dateObj = dayjs(data.date);
-      if (dateObj.hour() === 0 && dateObj.minute() === 0 && dateObj.second() === 0) {
+      if (
+        dateObj.hour() === 0 &&
+        dateObj.minute() === 0 &&
+        dateObj.second() === 0
+      ) {
         const now = dayjs();
         // ถ้าเป็นวันที่ปัจจุบัน ให้ใช้เวลาปัจจุบัน
         if (dateObj.isSame(now, 'day')) {
@@ -58,18 +62,24 @@ export class CreateTransactionUseCase {
     ];
     if (!finalCategory || genericCategories.includes(finalCategory)) {
       // 1. Try Keyword-based (Fast)
-      const keywordCategory = this.keywordCategorizationService.categorize(data.title);
-      
+      const keywordCategory = this.keywordCategorizationService.categorize(
+        data.title,
+      );
+
       if (keywordCategory) {
         finalCategory = keywordCategory;
         // Even if keyword hits, we should still call AI for titleEn translation
-        const aiResult = await this.aiCategorizationService.categorize(data.title);
+        const aiResult = await this.aiCategorizationService.categorize(
+          data.title,
+        );
         if (aiResult) {
           finalTitleEn = aiResult.titleEn;
         }
       } else {
         // 2. Try AI-based (Smart)
-        const aiResult = await this.aiCategorizationService.categorize(data.title);
+        const aiResult = await this.aiCategorizationService.categorize(
+          data.title,
+        );
         if (aiResult) {
           finalCategory = aiResult.category;
           finalTitleEn = aiResult.titleEn;
@@ -77,7 +87,9 @@ export class CreateTransactionUseCase {
       }
     } else {
       // If user provided a specific category, we still might want to translate the title
-      const aiResult = await this.aiCategorizationService.categorize(data.title);
+      const aiResult = await this.aiCategorizationService.categorize(
+        data.title,
+      );
       if (aiResult) {
         finalTitleEn = aiResult.titleEn;
       }
