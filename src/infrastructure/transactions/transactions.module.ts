@@ -10,6 +10,10 @@ import {
   GetDashboardUseCase,
 } from '@application/use-cases/transactions';
 
+// Import services
+import { KeywordCategorizationService } from '@application/services/keyword-categorization.service';
+import { AICategorizationService } from '@application/services/ai-categorization.service';
+
 /**
  * Transactions Module
  * Handles transaction-related functionality
@@ -23,6 +27,9 @@ import {
     UpdateTransactionUseCase,
     DeleteTransactionUseCase,
     GetDashboardUseCase,
+    // Services
+    KeywordCategorizationService,
+    AICategorizationService,
   ],
   exports: [
     // Export use cases for controllers

@@ -15,6 +15,7 @@ export class TransactionMapper {
     return Transaction.create({
       id: prismaTransaction.id,
       title: prismaTransaction.title,
+      titleEn: prismaTransaction.titleEn,
       amount: prismaTransaction.amount,
       type: prismaTransaction.type as 'INCOME' | 'EXPENSE',
       category: prismaTransaction.category,
@@ -29,6 +30,7 @@ export class TransactionMapper {
   static toPrisma(transaction: Transaction): Omit<PrismaTransaction, 'id'> {
     return {
       title: transaction.title,
+      titleEn: transaction.titleEn,
       amount: transaction.amount.amount,
       type: transaction.type.value as PrismaTransactionType,
       category: transaction.category,

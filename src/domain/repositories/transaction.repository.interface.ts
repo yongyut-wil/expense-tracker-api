@@ -45,6 +45,7 @@ export interface ITransactionRepository {
    */
   create(data: {
     title: string;
+    titleEn?: string | null;
     amount: number;
     type: 'INCOME' | 'EXPENSE';
     category: string;
@@ -59,6 +60,7 @@ export interface ITransactionRepository {
     id: number,
     data: Partial<{
       title: string;
+      titleEn: string | null;
       amount: number;
       type: 'INCOME' | 'EXPENSE';
       category: string;

@@ -7,7 +7,7 @@ import {
 import { Transaction } from '@domain/entities/transaction.entity';
 import { TransactionMapper } from '../mappers/transaction.mapper';
 import { TransactionNotFoundException } from '@domain/exceptions';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 
 dayjs.extend(utc);
@@ -30,7 +30,7 @@ export class TransactionRepository implements ITransactionRepository {
   async findByUserId(userId: number): Promise<Transaction[]> {
     const transactions = await this.prisma.transaction.findMany({
       where: { userId },
-      orderBy: { date: 'desc' },
+      orderBy: [{ date: 'desc' }, { id: 'desc' }],
     });
     return TransactionMapper.toDomainList(transactions);
   }
@@ -48,13 +48,14 @@ export class TransactionRepository implements ITransactionRepository {
           lte: endDate,
         },
       },
-      orderBy: { date: 'desc' },
+      orderBy: [{ date: 'desc' }, { id: 'desc' }],
     });
     return TransactionMapper.toDomainList(transactions);
   }
 
   async create(data: {
     title: string;
+    titleEn?: string | null;
     amount: number;
     type: 'INCOME' | 'EXPENSE';
     category: string;
@@ -64,6 +65,7 @@ export class TransactionRepository implements ITransactionRepository {
     const transaction = await this.prisma.transaction.create({
       data: {
         title: data.title,
+        titleEn: data.titleEn ?? null,
         amount: data.amount,
         type: data.type,
         category: data.category,
@@ -78,6 +80,7 @@ export class TransactionRepository implements ITransactionRepository {
     id: number,
     data: Partial<{
       title: string;
+      titleEn: string | null;
       amount: number;
       type: 'INCOME' | 'EXPENSE';
       category: string;

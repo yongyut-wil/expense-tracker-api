@@ -28,7 +28,7 @@ import { CreateTransactionDto } from '@application/dto/transactions/create-trans
 import { UpdateTransactionDto } from '@application/dto/transactions/update-transaction.dto';
 import { FilterTransactionDto } from '@application/dto/transactions/filter-transaction.dto';
 import { CurrentUser } from '@infrastructure/http/decorators/current-user.decorator';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 
 dayjs.extend(utc);

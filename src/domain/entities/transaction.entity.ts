@@ -9,6 +9,7 @@ export class Transaction {
   constructor(
     public readonly id: number,
     public readonly title: string,
+    public readonly titleEn: string | null,
     public readonly amount: Money,
     public readonly type: TransactionType,
     public readonly category: string,
@@ -22,6 +23,7 @@ export class Transaction {
   static create(data: {
     id: number;
     title: string;
+    titleEn?: string | null;
     amount: number;
     type: 'INCOME' | 'EXPENSE';
     category: string;
@@ -31,6 +33,7 @@ export class Transaction {
     return new Transaction(
       data.id,
       data.title,
+      data.titleEn ?? null,
       Money.create(data.amount),
       TransactionType.create(data.type),
       data.category,
@@ -44,6 +47,7 @@ export class Transaction {
    */
   static createNew(data: {
     title: string;
+    titleEn?: string | null;
     amount: number;
     type: 'INCOME' | 'EXPENSE';
     category: string;
@@ -51,6 +55,7 @@ export class Transaction {
     userId: number;
   }): {
     title: string;
+    titleEn: string | null;
     amount: Money;
     type: TransactionType;
     category: string;
@@ -59,6 +64,7 @@ export class Transaction {
   } {
     return {
       title: data.title,
+      titleEn: data.titleEn ?? null,
       amount: Money.create(data.amount),
       type: TransactionType.create(data.type),
       category: data.category,
@@ -94,6 +100,7 @@ export class Transaction {
   toPlainObject(): {
     id: number;
     title: string;
+    titleEn: string | null;
     amount: number;
     type: 'INCOME' | 'EXPENSE';
     category: string;
@@ -103,6 +110,7 @@ export class Transaction {
     return {
       id: this.id,
       title: this.title,
+      titleEn: this.titleEn,
       amount: this.amount.amount,
       type: this.type.value,
       category: this.category,

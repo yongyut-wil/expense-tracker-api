@@ -27,6 +27,7 @@ model User {
 model Transaction {
   id          Int      @id @default(autoincrement())
   title       String
+  titleEn     String?  
   amount      Int      
   type        TransactionType
   category    String   
